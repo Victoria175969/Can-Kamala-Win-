@@ -1,5 +1,6 @@
 # US Presidential Poll Data Analysis: Can Kamala Win?
 
+Link to the presentation: https://docs.google.com/presentation/d/1rA_lkLEZ0dGhIQs0ks-i8Zila951oxDI2tfB1v1qEe8/edit#slide=id.g307776ec05b_0_3
 
 ## Introduction
 
