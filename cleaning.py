@@ -16,3 +16,47 @@ def cleaning_2016(df_2016):
         index_names = df_2016[(df_2016['modeldate'] < start_date) | (df_2016['modeldate'] > end_date)].index
         df_2016.drop(index_names, inplace = True)
         df_2016.dropna(how="any", inplace=True)
+
+
+# function table scraping 
+
+import requests
+from bs4 import BeautifulSoup
+import re
+import pandas as pd
+
+def table_scraper(year):
+    result_votes_year = {} 
+    response = requests.get(f"https://en.wikipedia.org/wiki/{year}_United_States_presidential_election#Results_by_state")
+    soup = BeautifulSoup(response.content, 'html.parser')
+    table = soup.find('div', style='overflow:auto')                                      # find table
+    if table is None:
+        print(f"no results found for year: {year}.")
+        return None
+    table_list = [td.text.strip() for td in table.find_all('td')]                        # loop trough tables list and get td tags
+    states_data = []                                                                     # create list with numbers by states                                                                
+    current_state = []   
+    for element in table_list:
+        if re.search(r'[a-zA-Z]', element):                                              # look for values with letters (states)
+            if current_state:
+                states_data.append(current_state)                                        # grouping states data into sublists   
+            current_state = [element]  
+        else:
+            current_state.append(element)     
+    if current_state:
+        states_data.append(current_state)
+    result_votes_year = {                                                              # create with dict with indexes
+    entry[0]: {
+        "Democratic Candidate": entry[2],
+        "Republican Candidate": entry[5]
+        }
+    for entry in states_data if len(entry) > 5 }                                       # create data frame
+    df_results_year = pd.DataFrame.from_dict(result_votes_year, orient='index')
+    df_results_year.index.name = 'State'
+    df_results_year.columns = ['Democratic Candidate', 'Republican Candidadte']
+     # comprehension to get national votes 
+    df_results_year.loc['National'] = [value for value in (th.get_text(strip=True) for th in soup.find_all('th', style="text-align:right") if "%" in th.get_text(strip=True)) if value != '%'][:2]
+    
+    return df_results_year
+
+
