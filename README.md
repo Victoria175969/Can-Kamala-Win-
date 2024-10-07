@@ -30,6 +30,7 @@ Can Kamala Harris win the 2024 presidential election?
 H1: The average deviation between September polls and the final election results is no more than 5%, both at the state and national levels.
 H2: Poll trends are influenced by major events, potentially impacting election day results.
 
+Presentation: https://docs.google.com/presentation/d/1rA_lkLEZ0dGhIQs0ks-i8Zila951oxDI2tfB1v1qEe8/edit#slide=id.p
 
 ## Methodology
 
